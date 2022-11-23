@@ -49,6 +49,7 @@ public class List<T> {
      * aktuelles Objekt.
      */
     public void next(){
+        //ToDo einmal testen und überprüfen das sieht nicht richtig aus. Bitte funktion gemäß oberen Text überprüfen
         if(isEmpty()) {
             return;
         }
@@ -123,6 +124,8 @@ public class List<T> {
             if(tmp.getNext()==(current)) {
                 Node<T> newNode = new Node<T>(pContext);
                 newNode.setNext(tmp.getNext().getNext());
+                // ToDo sicher, dass es in der nächsten Zeile nicht folgendes stehen muss?
+                // tmp.setNext(newNode);
                 tmp.setNext(new Node<T>(pContext));
                 break;
             }
@@ -148,6 +151,7 @@ public class List<T> {
 
         Node<T> tmp = first;
         while(tmp.getNext() !=null){
+            //ToDo da ist nen leerzeichen zuviel :P (nächste Zeile)
             tmp = tmp .getNext();
         }
         tmp.setNext(new Node<T>(pContext));
@@ -163,6 +167,7 @@ public class List<T> {
      * ist, bleibt die Liste unverändert.
      */
     public void insert(T pContext){
+        //ToDo die ist auch noch falsch. Einmal mit dem Text oben abgleichen
         if(pContext ==null){
             return;
         }
@@ -209,6 +214,7 @@ public class List<T> {
 
         Node<T> tmp=first;
         while(tmp.getNext() != null) {
+            //ToDO Das sieht falsch aus eigentlich musst du tmp.next == current überprüfen um current zu löschen. Aktuell löschst du nicht das aktuelle Objekt. Einmal testen bitte
             if(tmp == current) {
                 if(current.getNext()!=null) {
                     tmp.setNext(current.getNext());
@@ -227,11 +233,9 @@ public class List<T> {
         Node<T> tmp = first;
         while (tmp != null) {
             ret += tmp.getContext();
-
             if (tmp.getNext() != null) {
                 ret += ";";
             }
-
             tmp = tmp.getNext();
         }
 
