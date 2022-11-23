@@ -2,6 +2,7 @@ package de.hebk.model.list;
 
 import de.hebk.model.node.Node;
 
+
 /**
  * Objekte der Klasse List verwalten beliebig viele, linear angeordnete Objekte. Auf
  * höchstens ein Listenobjekt, aktuelles Objekt genannt, kann jeweils zugegriffen
@@ -16,7 +17,7 @@ import de.hebk.model.node.Node;
  */
 public class List<T> {
     private Node<T> first;
-    private Node<T> aktuelleNode;
+    private Node<T> current;
 
 
     /**
@@ -25,8 +26,7 @@ public class List<T> {
      * @return
      */
     public boolean isEmpty(){
-        //TODO fill
-        return true;
+        return first == null;
     }
 
     /**
@@ -35,8 +35,10 @@ public class List<T> {
      * @return
      */
     public  boolean hasAccess(){
-        //TODO fill
-        return true;
+        if(current != null){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -47,7 +49,17 @@ public class List<T> {
      * aktuelles Objekt.
      */
     public void next(){
-        //TODO fill
+        if(isEmpty()) {
+            return;
+        }
+        if (hasAccess()){
+            current = first;
+            return;
+        }
+        if (current.getNext()!=null) {
+            current = current.getNext();
+
+        }
     }
 
     /**
@@ -55,15 +67,26 @@ public class List<T> {
      * aktuelles Objekt. Ist die Liste leer, geschieht nichts
      */
     public void toFirst(){
-        //TODO fill
+        if (isEmpty()) {
+            return;
+        }
+        current = first;
     }
+
 
     /**
      * Falls die Liste nicht leer ist, wird das letzte Objekt der Liste
      * aktuelles Objekt. Ist die Liste leer, geschieht nichts.
      */
     public void toLast(){
-        //TODO fill
+        if(isEmpty()) {
+            return;
+        }
+        Node<T> tmp =first;
+        while(tmp.getNext() != null) {
+            tmp = tmp.getNext();
+        }
+        current = tmp;
     }
 
     /**
@@ -73,15 +96,38 @@ public class List<T> {
      * @return
      */
     public T getObject(){
-        return aktuelleNode.getContext();
+        if(isEmpty()){
+            return null;
+        }
+        return current.getContext();
     }
 
     /**
      * Falls es ein aktuelles Objekt gibt und pObject ungleich null ist,
      * wird das aktuelle Objekt durch pObject ersetzt.
      */
-    public void setObject(){
-        //TODO fill
+    public void setObject(T pContext){
+        if (pContext== null || isEmpty() || hasAccess()) {
+            return;
+        }
+        if (first.equals(current)) {
+            Node<T> tmp = first ;
+
+            first = new Node<T>(pContext);
+            first.setNext(tmp.getNext());
+            current = first;
+            return;
+        }
+        Node<T> tmp = first;
+        while (tmp.getNext() != null) {
+            if(tmp.getNext()==(current)) {
+                Node<T> newNode = new Node<T>(pContext);
+                newNode.setNext(tmp.getNext().getNext());
+                tmp.setNext(new Node<T>(pContext));
+                break;
+            }
+            tmp = tmp.getNext();
+        }
     }
 
     /**
@@ -92,7 +138,19 @@ public class List<T> {
      * Falls pObject gleich null ist, bleibt die Liste unverändert.
      */
     public void append(T pContext){
-        //TODO fill
+        if (pContext ==null) {
+            return;
+        }
+        if(isEmpty()){
+            first = new Node<T>(pContext);
+            return;
+        }
+
+        Node<T> tmp = first;
+        while(tmp.getNext() !=null){
+            tmp = tmp .getNext();
+        }
+        tmp.setNext(new Node<T>(pContext));
     }
 
     /**
@@ -105,8 +163,14 @@ public class List<T> {
      * ist, bleibt die Liste unverändert.
      */
     public void insert(T pContext){
-        //TODO fill
+        if(pContext ==null){
+            return;
+        }
+        if(isEmpty()) {
+            first =new Node<T>(pContext);
+        }
     }
+
 
     /**
      * Die Liste pList wird an die Liste angehängt. Das aktuelle Objekt
@@ -114,7 +178,17 @@ public class List<T> {
      * bleibt die Liste unverändert
      */
     public void concat(List<T> pList){
-        //TODO fill
+        if(pList == null  || pList.isEmpty())  {
+            return;
+        }
+        if (isEmpty()) {
+            first= pList.first;
+        }
+        Node<T> tmp =first;
+        while(tmp.getNext() != null) {
+            tmp = tmp.getNext();
+        }
+        tmp.setNext(pList.first);
     }
 
     /**
@@ -126,7 +200,44 @@ public class List<T> {
      * unverändert.
      */
     public void remove(){
-        //TODO fill
+        if (isEmpty() || !hasAccess()) {
+            return;
+        } else if(first == current) {
+            first = first.getNext();
+            return;
+        }
+
+        Node<T> tmp=first;
+        while(tmp.getNext() != null) {
+            if(tmp == current) {
+                if(current.getNext()!=null) {
+                    tmp.setNext(current.getNext());
+                }
+                else {
+                    tmp.setNext(null);
+                }
+                return;
+            }
+            tmp=tmp.getNext();
+        }
+    }
+    public String toString() {
+        String ret = "[";
+
+        Node<T> tmp = first;
+        while (tmp != null) {
+            ret += tmp.getContext();
+
+            if (tmp.getNext() != null) {
+                ret += ";";
+            }
+
+            tmp = tmp.getNext();
+        }
+
+        ret += "]";
+
+        return ret;
     }
 
 }
