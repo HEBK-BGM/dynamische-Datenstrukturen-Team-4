@@ -124,9 +124,7 @@ public class List<T> {
             if(tmp.getNext()==(current)) {
                 Node<T> newNode = new Node<T>(pContext);
                 newNode.setNext(tmp.getNext().getNext());
-                // ToDo sicher, dass es in der nächsten Zeile nicht folgendes stehen muss?
-                // tmp.setNext(newNode);
-                tmp.setNext(new Node<T>(pContext));
+                tmp.setNext(newNode);
                 break;
             }
             tmp = tmp.getNext();
@@ -151,8 +149,7 @@ public class List<T> {
 
         Node<T> tmp = first;
         while(tmp.getNext() !=null){
-            //ToDo da ist nen leerzeichen zuviel :P (nächste Zeile)
-            tmp = tmp .getNext();
+            tmp = tmp.getNext();
         }
         tmp.setNext(new Node<T>(pContext));
     }
@@ -167,12 +164,20 @@ public class List<T> {
      * ist, bleibt die Liste unverändert.
      */
     public void insert(T pContext){
-        //ToDo die ist auch noch falsch. Einmal mit dem Text oben abgleichen
-        if(pContext ==null){
+        Node<T> tmp = first;
+        if(!hasAccess() && isEmpty() || pContext == null) {
             return;
-        }
-        if(isEmpty()) {
-            first =new Node<T>(pContext);
+        }else if(isEmpty()) {
+            first = new Node<T>(pContext);
+        }else if(hasAccess() && first != current){
+            while(tmp.getNext() != current){
+                tmp = tmp.getNext();
+            }
+            tmp.setNext(new Node<T>(pContext));
+            tmp.getNext().setNext(current);
+        }else if(first == current){
+            first = new Node<T>(pContext);
+            first.setNext(current);
         }
     }
 
@@ -205,27 +210,15 @@ public class List<T> {
      * unverändert.
      */
     public void remove(){
-        if (isEmpty() || !hasAccess()) {
-            return;
-        } else if(first == current) {
-            first = first.getNext();
-            return;
-        }
-
         Node<T> tmp=first;
-        while(tmp.getNext() != null) {
-            //ToDO Das sieht falsch aus eigentlich musst du tmp.next == current überprüfen um current zu löschen. Aktuell löschst du nicht das aktuelle Objekt. Einmal testen bitte
-            if(tmp == current) {
-                if(current.getNext()!=null) {
-                    tmp.setNext(current.getNext());
-                }
-                else {
-                    tmp.setNext(null);
-                }
-                return;
-            }
-            tmp=tmp.getNext();
-        }
+        Node<T> next = current.getNext();
+       if(hasAccess()){
+           while(tmp.getNext()!= current){
+               tmp = tmp.getNext();
+           }
+           current = tmp;
+           current.setNext(next);
+       }
     }
     public String toString() {
         String ret = "[";
