@@ -54,6 +54,7 @@ public class List<T> {
             return;
         }
         if (hasAccess()){
+            // ToDO wenn es ein aktuelles Element gibt, dann wird es auf das first Node gesetzt? Das ist nicht richtig
             current = first;
             return;
         }
@@ -212,10 +213,13 @@ public class List<T> {
     public void remove(){
         Node<T> tmp=first;
         Node<T> next = current.getNext();
+        // ToDo hasAcces sollte vor current.getNext() überprüft werden
        if(hasAccess()){
            while(tmp.getNext()!= current){
                tmp = tmp.getNext();
            }
+           //ToDo es fehlt: das Objekt hinter dem gelöschten Objekt wird
+           //     * zum aktuellen Objekt
            current = tmp;
            current.setNext(next);
        }
