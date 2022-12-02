@@ -35,10 +35,7 @@ public class List<T> {
      * @return
      */
     public  boolean hasAccess(){
-        if(current != null){
-            return true;
-        }
-        return false;
+        return current != null;
     }
 
     /**
@@ -60,7 +57,6 @@ public class List<T> {
         }
         if (current.getNext()!=null) {// soll null sein nicht überprüfen
             current = current.getNext();
-
         }
     }
 
@@ -98,6 +94,7 @@ public class List<T> {
      * @return
      */
     public T getObject(){
+        //ToDo du musst überprüfen, ob current==null ist z.B. mit hasAcces() und nicht ob die Liste leer ist ;)
         if(isEmpty()){
             return null;
         }
@@ -109,27 +106,13 @@ public class List<T> {
      * wird das aktuelle Objekt durch pObject ersetzt.
      */
     public void setObject(T pContext){
-        if (pContext== null || isEmpty() || hasAccess()) {
+        //Fall es gibt kein aktuelles Objekt oder die Liste ist leer oder  pContext == null
+        if (!hasAccess() || isEmpty() || pContext == null) {
             return;
         }
-        if (first.equals(current)) {
-            Node<T> tmp = first ;
-
-            first = new Node<T>(pContext);
-            first.setNext(tmp.getNext());
-            current = first;
-            return;
-        }
-        Node<T> tmp = first;
-        while (tmp.getNext() != null) {
-            if(tmp.getNext()==(current)) {
-                Node<T> newNode = new Node<T>(pContext);
-                newNode.setNext(tmp.getNext().getNext());
-                tmp.setNext(newNode);
-                break;
-            }
-            tmp = tmp.getNext();
-        }
+        //ToDo einmal mit deinem Code vergleiche ;)
+        // Da wir nun den Inhalt austauschen können wir das ganz einfach machen
+        current.setContext(pContext);
     }
 
     /**
@@ -165,18 +148,19 @@ public class List<T> {
      * ist, bleibt die Liste unverändert.
      */
     public void insert(T pContext){
+        // ToDo hab die Methode mal aufgeräumt so sollte sie gehen. Einmal mit deinem Pullrequest vergleichen
         Node<T> tmp = first;
-        if(!hasAccess() && isEmpty() || pContext == null) {
+        if(!hasAccess() || pContext == null) {
             return;
         }else if(isEmpty()) {
             first = new Node<T>(pContext);
-        }else if(hasAccess() && first != current){
+        }else if(first != current){
             while(tmp.getNext() != current){
                 tmp = tmp.getNext();
             }
             tmp.setNext(new Node<T>(pContext));
             tmp.getNext().setNext(current);
-        }else if(first == current){
+        }else {
             first = new Node<T>(pContext);
             first.setNext(current);
         }
@@ -212,7 +196,7 @@ public class List<T> {
      */
     public void remove(){
         Node<T> tmp=first;
-        Node<T> next = current.getNext(); // null pointer acception
+        Node<T> next = current.getNext(); // null pointer exception sofern current == null
         // ToDo hasAcces sollte vor current.getNext() überprüft werden
        if(hasAccess()){
            while(tmp.getNext()!= current){
@@ -220,8 +204,6 @@ public class List<T> {
            }
            //ToDo es fehlt: das Objekt hinter dem gelöschten Objekt wird
            //     * zum aktuellen Objekt
-
-
            current = tmp;
            current.setNext(next);
        }
