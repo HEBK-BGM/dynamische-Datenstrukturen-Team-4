@@ -58,7 +58,7 @@ public class List<T> {
             current = first;
             return;
         }
-        if (current.getNext()!=null) {
+        if (current.getNext()!=null) {// soll null sein nicht überprüfen
             current = current.getNext();
 
         }
@@ -212,7 +212,7 @@ public class List<T> {
      */
     public void remove(){
         Node<T> tmp=first;
-        Node<T> next = current.getNext();
+        Node<T> next = current.getNext(); // null pointer acception
         // ToDo hasAcces sollte vor current.getNext() überprüft werden
        if(hasAccess()){
            while(tmp.getNext()!= current){
@@ -220,6 +220,8 @@ public class List<T> {
            }
            //ToDo es fehlt: das Objekt hinter dem gelöschten Objekt wird
            //     * zum aktuellen Objekt
+
+
            current = tmp;
            current.setNext(next);
        }
